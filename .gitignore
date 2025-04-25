@@ -1,0 +1,6 @@
+.venv
+.venvasap
+
+# Dataset folder
+dataset/
+Guideline.pdf
