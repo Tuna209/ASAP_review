@@ -1,6 +1,12 @@
 .venv
 .venvasap
 
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
 # Dataset folder
 dataset/
 Guideline.pdf
