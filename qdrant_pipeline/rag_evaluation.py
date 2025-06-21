@@ -18,9 +18,12 @@ def load_asap_data_for_evaluation():
     papers_data = []
     review_data = []
     
-    dataset_path = "../dataset"
+    dataset_path = "dataset"
     conference_dirs = glob.glob(os.path.join(dataset_path, "*_20*"))
-    
+
+    print(f"Dataset path: {dataset_path}")
+    print(f"Found conference directories: {conference_dirs}")
+
     print("Loading papers and reviews for RAG evaluation...")
     for conf_dir in tqdm(conference_dirs):
         conf_name = os.path.basename(conf_dir)
@@ -78,9 +81,14 @@ def load_asap_data_for_evaluation():
         )
     
     # Propagate decision to reviews
-    reviews_df['simple_decision'] = reviews_df['paper_id'].map(
-        papers_df.set_index('id')['simple_decision']
-    )
+    if len(reviews_df) > 0 and 'paper_id' in reviews_df.columns:
+        reviews_df['simple_decision'] = reviews_df['paper_id'].map(
+            papers_df.set_index('id')['simple_decision']
+        )
+    else:
+        print(f"Warning: reviews_df columns: {reviews_df.columns.tolist()}")
+        print(f"Warning: reviews_df shape: {reviews_df.shape}")
+        return pd.DataFrame()  # Return empty DataFrame if structure is wrong
     
     # Clean data 
     reviews_df = reviews_df.dropna(subset=["simple_decision", "review_text"]).reset_index(drop=True)
